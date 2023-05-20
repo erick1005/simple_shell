@@ -1,12 +1,19 @@
 #include "shell.h"
 
-int main(void) {
+/**
+ *main - shell entry
+ *
+ * Return: 0
+ */
+int main(void)
+{
 	char disp[] = "#cisfun$ ";
 	char commandEx[BUFFER_SIZE];
 
 	pid_t pd;
 
-	while (1) {
+	while (1)
+	{
 		printf("%s", disp);
 
 		if (fgets(commandEx, BUFFER_SIZE, stdin) == NULL)
@@ -16,15 +23,20 @@ int main(void) {
 
 		pd = fork();
 
-		if (pd == -1) {
+		if (pd == -1)
+		{
 			perror("fork");
 			exit(EXIT_FAILURE);
-		} else if (pd == 0) {
+		} else if (pd == 0)
+		{
 			execlp(commandEx, commandEx, (char *)NULL);
 			perror(commandEx);
 			exit(EXIT_FAILURE);
-		}else {
+		}
+		else
+		{
 			int status;
+
 			wait(&status);
 		}
 	}
