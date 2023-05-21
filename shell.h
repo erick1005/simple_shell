@@ -22,4 +22,18 @@ int checker(char e, char *check);
 int alpha(int e);
 int conver(char *s);
 
+/*shell1 prototypes */
+
+
+/* allias prototypes */
+int _usedcommands(info_t *input);
+int _allias(info_t *input, char *strn);
+int select_allias(info_t *input, char *strn);
+int display_allias(list_t *node);
+int _cpallias(info_t *input);
+
+/* error_puts prototypes */
+void error_puts(char *strn);
+int error_char(char *r);
+int puts_char(char *strn, int fd);
 #endif
