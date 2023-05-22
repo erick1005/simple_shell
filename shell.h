@@ -36,4 +36,11 @@ int _cpallias(info_t *input);
 void error_puts(char *strn);
 int error_char(char *r);
 int puts_char(char *strn, int fd);
+
+typedef struct liststr
+{
+	int num;
+	char *str;
+	struct liststr *next;
+} list_t;
 #endif
