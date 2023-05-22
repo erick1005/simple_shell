@@ -32,6 +32,13 @@ typedef struct info_s {
 	char **argv;
 } info_t;
 
+typedef struct liststr
+{
+        int num;
+        char *str;
+        struct liststr *next;
+} list_t;
+
 int inter(info_t *struc);
 int checker(char e, char *check);
 int alpha(int e);
@@ -50,8 +57,13 @@ int rmenv(info_t *en);
 
 int penv(info_t *en);
 
-/*shell1 prototypes */
+/*exit */
+char *string_copy(char *src, int i, char *dest);
+char *string_cat(char *src, char *dest, int i);
+char *loc(char *str, char ch);
 
+// getline//
+ssize_t get_line(char **linep, size_t *t, int fd);
 
 /* allias prototypes */
 int _usedcommands(info_t *input);
