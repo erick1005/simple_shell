@@ -1,5 +1,16 @@
 #include "shell.h"
 
+void print_list_str(list_t *list)
+{
+	list_t *node = list;
+	while (node)
+	{
+		eputs("%s\n", node->str);
+		node = node->next;
+	}
+}
+
+
 /**
  * envi - prints current environment
  * @en: contain arguements
@@ -26,7 +37,9 @@ char *getenv(info_t *en, const char *nm)
 	while (node)
 	{
 		n = starts_with(node->str, nm);
-		if(n && *n)
+
+		if (n && *n)
+
 			return (n);
 		node = node->next;
 	}
@@ -45,9 +58,12 @@ int setenv(info_t *en)
 		eputs("Incorrect numberof arguements\n");
 		return (1);
 	}
-	if (setenv(en, en->argv[1], en->argv[2]))
-		return (0);
-	return (1);
+	if (setenv(en->argv[1], en->argv[2], 1) == -1)
+	{
+		perror("setenv");
+		return (1);
+	}
+	return (0);
 }
 /**
  * rmenv - remove environment variable
@@ -58,17 +74,26 @@ int setenv(info_t *en)
 int rmenv(info_t *en)
 {
 	int i;
+
 	if (en->argc == 1)
 	{
 		eputs("Too few arguements.\n");
 		return (1);
 	}
-	for(i = 1; i <= en->argc; i++)
-		rmenv(en, en->argv[i]);
+	for (i = 1; i <= en->argc; i++)
+	{
+		if (unsetenv(en->argv[i]) == -1)
+		{
+			perror("unsetv");
+
+
+			return (1);
+		}
+	}
 	return (0);
 }
 /**
- * pen - populate enviroment listt
+ * penv - populate enviroment listt
  * @en: contains arguements
  * Return: Always 0
  */
