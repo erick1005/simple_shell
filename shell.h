@@ -9,28 +9,46 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-<<<<<<< Updated upstream
-#include <stddef.h>
-=======
 #include <fcntl.h>
-#include <dirent.h>
-#include <signal.h>
 #include <sys/stat.h>
->>>>>>> Stashed changes
+#include <limits.h>
+#include <errno.h>
 
-#define BUFFER_SIZE 1024
+/* read/write buffers */
+#define READ_BUF_SIZE 1024
+#define WRITE_BUF_SIZE 1024
+#define BUF_FLUSH -1
+
+/*command chaining */
+#define CMD_NORM	0
+#define CMD_OR		1
+#define CMD_AND		2
+#define CMD_CHAIN	3
+
+/* for convert_number() */
+#define CONVERT_LOWERCASE	1
+#define CONVERT_UNSIGNED	2
+
+/* 1 if using system getline() */
+#define USE_GETLINE 0
+#define USE_STRTOK 0
+
+#define HIST_FILE	".simple_shell_history"
+#define HIST_MAX	4096
+
+
 
 
 typedef struct list_s {
 	char *str;
 	struct list_s *next;
-} list_t;
+} list_i;
 
 typedef struct info_s {
-	list_env;
+	list_i *en;
 	int argc;
 	char **argv;
-} info_t;
+} info_i;
 
 typedef struct liststr
 {
@@ -38,6 +56,33 @@ typedef struct liststr
         char *str;
         struct liststr *next;
 } list_t;
+
+typedef struct passinfo
+{
+	char *arg;
+	char **argv;
+	char *path;
+	int argc;
+	unsigned int line_count;
+	int err_num;
+	int linecount_flag;
+	char *fname;
+	list_t *env;
+	list_t *history;
+	list_t *alias;
+	char **environ;
+	int env_changed;
+	int status;
+
+	char **cmd_buf; /* pointer to cmd ; chain buffer, for memory mangement */
+	int cmd_buf_type; /* CMD_type ||, &&, ; */
+	int readfd;
+	int histcount;
+} info_t;
+
+#define INFO_INIT \
+{NULL, NULL, NULL, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, \
+	0, 0, 0}
 
 int inter(info_t *struc);
 int checker(char e, char *check);
@@ -49,9 +94,9 @@ void print_list_str(list_t *list);
 char *starts_with(const char *str, const char *prefix);
 int envi(info_t *en);
 
-char *getenv(info_t *en, const char *nm);
+char *get_env(info_t *en, const char *nm);
 
-int setenv(info_t *en);
+int _setenv(info_t *en);
 
 int rmenv(info_t *en);
 
@@ -62,7 +107,7 @@ char *string_copy(char *src, int i, char *dest);
 char *string_cat(char *src, char *dest, int i);
 char *loc(char *str, char ch);
 
-// getline//
+/* getline*/
 ssize_t get_line(char **linep, size_t *t, int fd);
 
 /* allias prototypes */
@@ -77,10 +122,11 @@ void error_puts(char *strn);
 int error_char(char *r);
 int puts_char(char *strn, int fd);
 
-typedef struct liststr
-{
-	int num;
-	char *str;
-	struct liststr *next;
-} list_t;
+/* err1 */
+int _erratoi(char *);
+void print_error(info_t *, char *);
+int print_d(int, int);
+char *convert_number(long int, int, int);
+void remove_comments(char *);
+
 #endif

@@ -1,16 +1,5 @@
 #include "shell.h"
 
-void print_list_str(list_t *list)
-{
-	list_t *node = list;
-	while (node)
-	{
-		eputs("%s\n", node->str);
-		node = node->next;
-	}
-}
-
-
 /**
  * envi - prints current environment
  * @en: contain arguements
@@ -19,7 +8,7 @@ void print_list_str(list_t *list)
 
 int envi(info_t *en)
 {
-	print_list_Str(en->env);
+	print_list_str(en->env);
 	return (0);
 }
 /**
@@ -29,7 +18,7 @@ int envi(info_t *en)
  *
  * Return: the value
  */
-char *getenv(info_t *en, const char *nm)
+char *get_env(info_t *en, const char *nm)
 {
 	list_t *node = en->env;
 	char *n;
@@ -51,19 +40,16 @@ char *getenv(info_t *en, const char *nm)
  *@en: contains arguements
  *Return: Always 0
  */
-int setenv(info_t *en)
+int _setenv(info_t *en)
 {
 	if (en->argc != 3)
 	{
-		eputs("Incorrect numberof arguements\n");
+		_eputs("Incorrect numberof arguements\n");
 		return (1);
 	}
-	if (setenv(en->argv[1], en->argv[2], 1) == -1)
-	{
-		perror("setenv");
-		return (1);
-	}
-	return (0);
+	if (setenv(en, en->argv[1], en->argv[2]))
+		return (0);
+	return (1);
 }
 /**
  * rmenv - remove environment variable
@@ -82,14 +68,8 @@ int rmenv(info_t *en)
 	}
 	for (i = 1; i <= en->argc; i++)
 	{
-		if (unsetenv(en->argv[i]) == -1)
-		{
-			perror("unsetv");
-
-
-			return (1);
-		}
-	}
+		unsetenv(en, en->argv[i]);
+		
 	return (0);
 }
 /**
