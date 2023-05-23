@@ -123,10 +123,13 @@ int error_char(char *r);
 int puts_char(char *strn, int fd);
 
 /* err1 */
-int _erratoi(char *);
-void print_error(info_t *, char *);
+int erratoi(char *);
+void print_errr(info_t *, char *);
 int print_d(int, int);
-char *convert_number(long int, int, int);
+char *convert_num(long int, int, int);
 void remove_comments(char *);
+int _putchar(char c);
+int _eputchar(char c);
+void _eputs(const char *str);
 
 #endif

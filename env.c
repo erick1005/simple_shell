@@ -12,7 +12,7 @@ int envi(info_t *en)
 	return (0);
 }
 /**
- * getenv - gets value of enviroment variable
+ * *getenv - gets value of enviroment variable
  * @en: contains arguements
  * @nm: variable name
  *
@@ -36,7 +36,7 @@ char *get_env(info_t *en, const char *nm)
 }
 
 /**
- *setenv - create new environment
+ *_setenv - create new environment
  *@en: contains arguements
  *Return: Always 0
  */
@@ -69,7 +69,7 @@ int rmenv(info_t *en)
 	for (i = 1; i <= en->argc; i++)
 	{
 		unsetenv(en, en->argv[i]);
-		
+
 	return (0);
 }
 /**
