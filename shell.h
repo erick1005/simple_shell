@@ -90,17 +90,14 @@ int alpha(int e);
 int conver(char *s);
 int shell_main(void);
 
-void print_list_str(list_t *list);
-char *starts_with(const char *str, const char *prefix);
-int envi(info_t *en);
+/* toem_environ.c */
+char *getenvi(info_t *, const char *);
+int myenvi(info_t *);
+int mysetenvi(info_t *);
+int _myunsetenvi(info_t *);
+int pplte_env_list(info_t *);
 
-char *get_env(info_t *en, const char *nm);
 
-int _setenv(info_t *en);
-
-int rmenv(info_t *en);
-
-int penv(info_t *en);
 
 /*exit */
 char *string_copy(char *src, int i, char *dest);
@@ -131,5 +128,10 @@ void remove_comments(char *);
 int _putchar(char c);
 int _eputchar(char c);
 void _eputs(const char *str);
+
+/* gtline */
+ssize_t getinput(info_t *);
+int get_input_line(info_t *, char **, size_t *);
+void sigint_Handler(int);
 
 #endif

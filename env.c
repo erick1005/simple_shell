@@ -1,89 +1,97 @@
 #include "shell.h"
+#include <stdlib.h>
+
+void print_list_str(char **list);
+char *starts_with(const char *str, const char *prefix);
+int _unsetenv(info_t *info, const char *name);
+list_t *add_node_end(list_t **head, char *str, int len);
+
 
 /**
- * envi - prints current environment
- * @en: contain arguements
- * Return: always 0
+ * myenvi - prints  current environment
+ * @info:  containing potential arguments.
+ * Return: Always 0
  */
-
-int envi(info_t *en)
+int myenvi(info_t *info)
 {
-	print_list_str(en->env);
+	print_list_str(info->env);
 	return (0);
 }
+
 /**
- * *getenv - gets value of enviroment variable
- * @en: contains arguements
- * @nm: variable name
+ * getenvi - gets the value  environ variable
+ * @info: Structure contains potential arguments.
+ * @name: env var name
  *
  * Return: the value
  */
-char *get_env(info_t *en, const char *nm)
+char *getenvi(info_t *info, const char *name)
 {
-	list_t *node = en->env;
-	char *n;
+	list_t *node = info->env;
+	char *p;
 
 	while (node)
 	{
-		n = starts_with(node->str, nm);
-
-		if (n && *n)
-
-			return (n);
+		p = starts_with(node->str, name);
+		if (p && *p)
+			return (p);
 		node = node->next;
 	}
 	return (NULL);
 }
 
 /**
- *_setenv - create new environment
- *@en: contains arguements
- *Return: Always 0
+ * mysetenvi - Initialize a new environment variable,
+ *             or modify an existing one
+ * @info: contain potential arguments.
+ *  Return: Always 0
  */
-int _setenv(info_t *en)
+int mysetenvi(info_t *info)
 {
-	if (en->argc != 3)
+	if (info->argc != 3)
 	{
-		_eputs("Incorrect numberof arguements\n");
+		_eputs("Incorrect number of arguements\n");
 		return (1);
 	}
-	if (setenv(en, en->argv[1], en->argv[2]))
+	if (setenv(info, info->argv[1], info->argv[2], 1) != 0)
 		return (0);
 	return (1);
 }
+
 /**
- * rmenv - remove environment variable
- * @en: contains arguements
+ * _myunsetenvi - Remove  environment variable
+ * @info:  contain potential arguments. Used to maintain
+ *        constant function prototype.
  * Return: Always 0
  */
-
-int rmenv(info_t *en)
+int _myunsetenvi(info_t *info)
 {
 	int i;
 
-	if (en->argc == 1)
+	if (info->argc == 1)
 	{
-		eputs("Too few arguements.\n");
+		_eputs("Too few arguements.\n");
 		return (1);
 	}
-	for (i = 1; i <= en->argc; i++)
-	{
-		unsetenv(en, en->argv[i]);
+	for (i = 1; i <= info->argc; i++)
+		_unsetenv(info, info->argv[i]);
 
 	return (0);
 }
+
 /**
- * penv - populate enviroment listt
- * @en: contains arguements
+ * pplte_env_list - populate env linked list
+ * @info: Structure containing potential arguments.
  * Return: Always 0
  */
-int penv(info_t *en)
+int ppulte_env_list(info_t *info)
 {
 	list_t *node = NULL;
 	size_t i;
 
-	for (i = 0; environ[i]; i++)
+	for (i = 0; nfo->env[i]; i++)
 		add_node_end(&node, environ[i], 0);
 	info->env = node;
 	return (0);
 }
+
