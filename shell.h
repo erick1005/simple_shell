@@ -55,6 +55,7 @@ typedef struct liststr
         int num;
 	int index;
         char *str;
+	char *info;
         struct liststr *next;
 } list_t;
 
@@ -74,6 +75,7 @@ typedef struct passinfo
 	char **environ;
 	int env_changed;
 	int status;
+	char *input;
 
 	char **cmd_buf; /* pointer to cmd ; chain buffer, for memory mangement */
 	int cmd_buf_type; /* CMD_type ||, &&, ; */
@@ -114,11 +116,11 @@ int help(info_t *info);
 ssize_t get_line(char **linep, size_t *t, int fd);
 
 /* allias prototypes */
-int _usedcommands(info_t *input);
-int _allias(info_t *input, char *strn);
-int select_allias(info_t *input, char *strn);
+int _usedcommands(info_t *info);
+int _allias(info_t *info, char *strn);
+int select_allias(info_t *info, char *strn);
 int display_allias(list_t *node);
-int _cpallias(info_t *input);
+int _cpallias(info_t *info);
 
 /* error_puts prototypes */
 void error_puts(char *strn);
