@@ -1,5 +1,4 @@
 #include "shell.h"
-
 /**
  * _usedcommands - shows previous commands used
  * @input: arguments container
@@ -10,7 +9,6 @@ int _usedcommands(info_t *input)
 	print_list(input->commands);
 	return (0);
 }
-
 /**
  * _allias - provide alias to string of characters
  * @input: struct variable
@@ -23,13 +21,11 @@ int _allias(info_t *input, char *strn)
 	char *t, r;
 
 	t = _strchr(strn, '=');
-
 	if (t == NULL)
 		return (1);
 	r = *t;
 	*t = 0;
-
-	result = del_node(&(input->allias), get_node(input->allias,first_node(input->, strn, -1)));
+	result = del_node(&(input->alias), get_node(input->alias, first_node(input->, strn, -1)));
 	*t = r;
 	return (result);
 }
@@ -45,17 +41,13 @@ int select_allias(info_t *input, char *strn)
 	char *t;
 
 	t = _strchr(strn, '=');
-
 	if (t == NULL)
 		return (1);
-
 	if (!*++t)
 		return (_allias(input, strn));
-
 	select_allias(input, strn);
-	return (last_node(&(input->allias), strn, 0) == NULL);
+	return (last_node(&(input->alias), strn, 0) == NULL);
 }
-
 /**
  * display_allias - output name;
  * @node: src node
@@ -71,11 +63,10 @@ int display_allias(list_t *node)
 	if (node)
 	{
 		s = _strchr(node->strn, '=');
-
 		for (t = node->strn; t <= s; t++)
 		{
 			_putchar(*t);
-			_putchar('\');
+			_putchar('\n');
 			_putchar(s + 1);
 			_putchar('\n');
 		}
@@ -96,7 +87,7 @@ int _cpallias(info_t *input)
 
 	if (input->argc == 1)
 	{
-		new_node = input->allias;
+		new_node = input->alias;
 
 		while (new_node != NULL)
 		{
@@ -112,7 +103,7 @@ int _cpallias(info_t *input)
 		if (q)
 			select_allias(input, input->argv[j]);
 		else
-			display_allias(first_node(input->allias, input->argv[j], '=');
+			display_allias(first_node(input->alias, input->argv[j], '=');
 	}
 	return (0);
 }

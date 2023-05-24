@@ -104,6 +104,11 @@ char *string_copy(char *src, int i, char *dest);
 char *string_cat(char *src, char *dest, int i);
 char *loc(char *str, char ch);
 
+/*exit status*/
+int _exitstatus(info_t *info);
+int _directory(info_t *info);
+int help(info_t *info);
+
 /* getline*/
 ssize_t get_line(char **linep, size_t *t, int fd);
 
