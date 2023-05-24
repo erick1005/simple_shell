@@ -53,6 +53,7 @@ typedef struct info_s {
 typedef struct liststr
 {
         int num;
+	int index;
         char *str;
         struct liststr *next;
 } list_t;
@@ -138,5 +139,9 @@ void _eputs(const char *str);
 ssize_t getinput(info_t *);
 int get_input_line(info_t *, char **, size_t *);
 void sigint_Handler(int);
+
+list_t *first_node(list_t **head, char *str, int index);
+list_t *last_node(list_t **head, char *str, int index);
+int delete_node(list_t **head, int num);
 
 #endif

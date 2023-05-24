@@ -2,7 +2,7 @@
 
 /**
  * get_line - takes sa string of inputs
- * @*linep: interactive
+ * @linep: interactive
  * @t: max size
  * @fd: input
  * Return: int

@@ -6,7 +6,7 @@
  */
 int _usedcommands(info_t *input)
 {
-	print_list(input->commands);
+	print_list(input->history);
 	return (0);
 }
 /**
@@ -25,7 +25,8 @@ int _allias(info_t *input, char *strn)
 		return (1);
 	r = *t;
 	*t = 0;
-	result = del_node(&(input->alias), get_node(input->alias, first_node(input->, strn, -1)));
+	result = del_node(&(input->alias),
+			get_node(input->alias, first_node(input->, strn, -1)));
 	*t = r;
 	return (result);
 }
@@ -59,11 +60,11 @@ int display_allias(list_t *node)
 	char *t = NULL;
 
 	if (node == NULL)
-		return;
+		return (-1);
 	if (node)
 	{
-		s = _strchr(node->strn, '=');
-		for (t = node->strn; t <= s; t++)
+		s = _strchr(node->str, '=');
+		for (t = node->str; t <= s; t++)
 		{
 			_putchar(*t);
 			_putchar('\n');
@@ -101,9 +102,13 @@ int _cpallias(info_t *input)
 		s = _strchr(input->argv[j], '=');
 
 		if (q)
+		{
 			select_allias(input, input->argv[j]);
+		}
 		else
-			display_allias(first_node(input->alias, input->argv[j], '=');
+		{
+			display_allias(first_node(input->alias, input->argv[j], '='));
+		}
 	}
 	return (0);
 }
