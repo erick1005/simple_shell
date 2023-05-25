@@ -15,9 +15,9 @@ int _exitstatus(info_t *info)
 		if (check == -1)
 		{
 			info->status = 2;
-			print_error(info, "unacceted input:");
-			error_puts(*(info->argv + 1));
-			error_char('\n');
+			print_errr(info, "unacceted input:");
+			_eputs(*(info->argv + 1));
+			_eputchar('\n');
 			return (1);
 		}
 		info->err_num = erratoi(*(info->argv + 1));
@@ -39,7 +39,7 @@ int _directory(info_t *info)
 
 	c = getcwd(buffer, 1024);
 	if (c == NULL)
-		_puts("TODO:>>getcwd failure msg<<\n");
+		_eputs("TODO:>>getcwd failure msg<<\n");
 	if (!*(info->argv + 1))
 	{
 		d = getenvi(info, "HOME=");
@@ -48,15 +48,15 @@ int _directory(info_t *info)
 		else
 			ch = chdir(d);
 	}
-	else if (_strcmp(*(info->argv + 1), "-") == 0)
+	else if (strcmp(*(info->argv + 1), "-") == 0)
 	{
 		if (!getenvi(info, "OLDPWD="))
 		{
-			_puts(c);
+			_eputs(c);
 			_putchar('\n');
 			return (1);
 		}
-		_puts(getenvi(info, "OLDPWD=")), _putchar('\n');
+		_eputs(getenvi(info, "OLDPWD=")), _putchar('\n');
 		ch = chdir((d = getenvi(info, "OLDPWD=")) ? d : "/");
 	}
 	else
@@ -64,12 +64,12 @@ int _directory(info_t *info)
 	if (ch == -1)
 	{
 		print_errr(info, "cant change directory to");
-		error_puts(*(info->argv + 1), error_char('\n');
+		_eputs(*(info->argv + 1)), _eputchar('\n');
 	}
 	else
 	{
-		mysetenvi(info, "OLDPWD", getenvi(info, "PWD="));
-		mysetenvi(info, "PWD", getcwd(buffer, 1024));
+		ssetenv(info, "OLDPWD", getenvi(info, "PWD="));
+		ssetenv(info, "PWD", getcwd(buffer, 1024));
 	}
 	return (0);
 }
@@ -83,8 +83,8 @@ int help(info_t *info)
 	char **arg;
 
 	arg = info->argv;
-	_puts("use help when the function isnt available");
+	_eputs("use help when the function isnt available");
 	if (0)
-		_puts(*arg);
+		_eputs(*arg);
 	return (0);
 }

@@ -99,6 +99,9 @@ int myenvi(info_t *);
 int mysetenvi(info_t *);
 int _myunsetenvi(info_t *);
 int pplte_env_list(info_t *);
+int ssetenv(info_t *info, char *var, char *value);
+int uunsetenv(info_t *info, char *var);
+char ggetenv(info_t *info);
 
 
 
@@ -113,7 +116,7 @@ int _directory(info_t *info);
 int help(info_t *info);
 
 /* getline*/
-ssize_t get_line(char **linep, size_t *t, int fd);
+ssize_t get_line(char **linep, ssize_t *t, int fd);
 
 /* allias prototypes */
 int _usedcommands(info_t *info);

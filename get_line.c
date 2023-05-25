@@ -7,7 +7,7 @@
  * @fd: input
  * Return: int
  */
-ssize_t get_line(char **linep, size_t *t, int fd)
+ssize_t get_line(char **linep, ssize_t *t, int fd)
 {
 	static char buffer[1024];
 	static ssize_t _size, _index;
@@ -18,9 +18,9 @@ ssize_t get_line(char **linep, size_t *t, int fd)
 		return (-1);
 	if (*linep == NULL)
 		*t = 1024;
-		*linep = malloc(*t);
-		if (*linep == NULL)
-			return (-1);
+	*linep = malloc(*t);
+	if (!*linep)
+		return (-1);
 	line = *linep;
 	while (1)
 	{

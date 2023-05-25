@@ -1,7 +1,7 @@
 #include "shell.h"
 #include <stdlib.h>
 
-void print_list_str(char **list);
+void print_list_str(const list_t *);
 char *starts_with(const char *str, const char *prefix);
 int _unsetenv(info_t *info, const char *name);
 list_t *add_node_end(list_t **head, char *str, int len);
@@ -53,7 +53,7 @@ int mysetenvi(info_t *info)
 		_eputs("Incorrect number of arguements\n");
 		return (1);
 	}
-	if (setenv(info, info->argv[1], info->argv[2], 1) != 0)
+	if (ssetenv(info, info->argv[1], info->argv[2]))
 		return (0);
 	return (1);
 }
@@ -76,22 +76,6 @@ int _myunsetenvi(info_t *info)
 	for (i = 1; i <= info->argc; i++)
 		_unsetenv(info, info->argv[i]);
 
-	return (0);
-}
-
-/**
- * pplte_env_list - populate env linked list
- * @info: Structure containing potential arguments.
- * Return: Always 0
- */
-int ppulte_env_list(info_t *info)
-{
-	list_t *node = NULL;
-	size_t i;
-
-	for (i = 0; nfo->env[i]; i++)
-		add_node_end(&node, environ[i], 0);
-	info->env = node;
 	return (0);
 }
 
