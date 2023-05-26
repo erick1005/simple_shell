@@ -41,7 +41,7 @@ extern char **environ;
 typedef struct builtin
 {
 	char *type;
-	int (*func)(info_t *);
+	int (*func)(ino_t *);
 } builtin_table;
 
 /**
@@ -101,10 +101,12 @@ typedef struct passinfo
 	int histcount;
 } info_t;
 
+
+
 int intactive(info_t *);
 int s_delim(char, char *);
 int isalpha(int);
-int atoi(char *);
+int my_atoi(char *);
 /*5-shell*/
 int erra_toi(char *);
 void printerror(info_t *, char *);

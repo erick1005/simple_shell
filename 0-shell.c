@@ -44,9 +44,9 @@ int isalpha(int c)
  * Return: convert number
  */
 
-int atoi(char *s)
+int my_atoi(char *s)
 {
-	int n, sign = 1, flag = 0, output;
+	int n, sign = 1, flag = 0, j = 0, output;
 	unsigned int result = 0;
 
 	for (n = 0; s[j] != '\0' && flag != 2; n++)
