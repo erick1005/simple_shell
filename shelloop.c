@@ -14,7 +14,7 @@ int mhsh(info_t *info, char **av)
 	while (r != -1 && builtin_ret != -2)
 	{
 		clear_info(info);
-		if (interactive(info))
+		if (intactive(info))
 			puts("$ ");
 		eputchar(BUF_FLUSH);
 		r = get_input(info);
@@ -25,13 +25,13 @@ int mhsh(info_t *info, char **av)
 			if (builtin_ret == -1)
 				find_cmd(info);
 		}
-		else if (interactive(info))
+		else if (intactive(info))
 			putchar('\n');
 		free_info(info, 0);
 	}
 	write_hist(info);
 	free_info(info, 1);
-	if (!interactive(info) && info->status)
+	if (!intactive(info) && info->status)
 		exit(info->status);
 	if (builtin_ret == -2)
 	{
@@ -89,12 +89,12 @@ void find_cmd(info_t *info)
 		info->linecount_flag = 0;
 	}
 	for (i = 0, k = 0; info->arg[i]; i++)
-		if (!is_delim(info->arg[i], " \t\n"))
+		if (!s_delim(info->arg[i], " \t\n"))
 			k++;
 	if (!k)
 		return;
 
-	path = find_path(info, _getenv(info, "PATH="), info->argv[0]);
+	path = find_path(info, getenva(info, "PATH="), info->argv[0]);
 	if (path)
 	{
 		info->path = path;
@@ -102,13 +102,13 @@ void find_cmd(info_t *info)
 	}
 	else
 	{
-		if ((interactive(info) || _getenv(info, "PATH=")
-					|| info->argv[0][0] == '/') && is_cmd(info, info->argv[0]))
+		if ((intactive(info) || getenva(info, "PATH=")
+					|| info->argv[0][0] == '/') && is_cmd_f(info, info->argv[0]))
 			forks_cmd(info);
 		else if (*(info->arg) != '\n')
 		{
 			info->status = 127;
-			print_error(info, "not found\n");
+			printerror(info, "not found\n");
 		}
 	}
 }
@@ -130,7 +130,7 @@ void forks_cmd(info_t *info)
 	}
 	if (child_pid == 0)
 	{
-		if (execve(info->path, info->argv, get_environ(info)) == -1)
+		if (execve(info->path, info->argv, getstr_environ(info)) == -1)
 		{
 			free_info(info, 1);
 			if (errno == EACCES)
@@ -145,7 +145,7 @@ void forks_cmd(info_t *info)
 		{
 			info->status = WEXITSTATUS(info->status);
 			if (info->status == 126)
-				print_error(info, "Permission denied\n");
+				printerror(info, "Permission denied\n");
 		}
 	}
 }

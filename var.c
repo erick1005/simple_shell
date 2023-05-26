@@ -87,10 +87,10 @@ int replace_aliass(info_t *info)
 		if (!node)
 			return (0);
 		free(info->argv[0]);
-		y = _strchr(node->str, '=');
+		y = strchr(node->str, '=');
 		if (!y)
 			return (0);
-		y = _strdup(y + 1);
+		y = _stridup(y + 1);
 		if (!y)
 			return (0);
 		info->argv[0] = y;
@@ -116,23 +116,23 @@ int replaces_vars(info_t *info)
 		if (!_strcmp(info->argv[i], "$?"))
 		{
 			replaces_string(&(info->argv[i]),
-					_strdup(convert_number(info->status, 10, 0)));
+					_stridup(convert_numb(info->status, 10, 0)));
 			continue;
 		}
 		if (!_strcmp(info->argv[i], "$$"))
 		{
 			replaces_string(&(info->argv[i]),
-					_strdup(convert_number(getpid(), 10, 0)));
+					_stridup(convert_numb(getpid(), 10, 0)));
 			continue;
 		}
 		node = node_starts_with(info->env, &info->argv[i][1], '=');
 		if (node)
 		{
 			replaces_string(&(info->argv[i]),
-					_strdup(_strchr(node->str, '=') + 1));
+					_stridup(strchr(node->str, '=') + 1));
 			continue;
 		}
-		replaces_string(&info->argv[i], _strdup(""));
+		replaces_string(&info->argv[i], _stridup(""));
 
 	}
 	return (0);

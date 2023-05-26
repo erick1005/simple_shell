@@ -171,7 +171,7 @@ void set_info(info_t *, char **);
 void free_info(info_t *, int);
 
 /*par*/
-int is_cmd_f(info_t *info, char *path);
+int is_cmd_f(info_t *info, char *);
 char *dup_charc(char *pathstr, int start, int stop);
 char *find_path(info_t *info, char *pathstr, char *cmd);
 
@@ -199,10 +199,10 @@ int mycd(info_t *);
 int _mychelp(info_t *);
 
 /*shellop*/
-int mhsh(info_t *info, char **av);
-int finds_builtin(info_t *info);
-void find_cmd(info_t *info);
-void forks_cmd(info_t *info);
+int mhsh(info_t *, char **);
+int finds_builtin(info_t *);
+void find_cmd(info_t *);
+void forks_cmd(info_t *);
 
 int _myhistory(info_t *);
 int _myalias(info_t *);
@@ -216,8 +216,8 @@ int populate_envlist(info_t *);
 
 /*4-shell*/
 void _eputsd(char *);
-int eputchar(char *);
-int put_fd(char *, int *);
-int _edputsfd(char **, int *);
+int eputchar(char );
+int put_fd(char c, int fd);
+int _edputsfd(char *str, int fd);
 
 #endif
