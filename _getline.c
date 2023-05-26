@@ -1,39 +1,6 @@
 #include "shell.h"
 
 /**
- * _realloc - reallocate memory
- * @ptr: pointer
- * @old_size: byte size
- * @new_size: byte size of new block
- *
- * Return: pointer to da ol'block nameen.
- */
-
-void *_real_loc(void *ptr, unsigned int old_size, unsigned int new_size);
-
-void *_real_loc(void *ptr, unsigned int old_size, unsigned int new_size)
-{
-	char *p;
-
-	if (!ptr)
-		return (malloc(new_size));
-	if (!new_size)
-		return (free(ptr), NULL);
-	if (new_size == old_size)
-		return (ptr);
-
-	p = malloc(new_size);
-	if (!p)
-		return (NULL);
-
-	old_size = old_size < new_size ? old_size : new_size;
-	while (old_size--)
-		p[old_size] = ((char *)ptr)[old_size];
-	free(ptr);
-	return (p);
-}
-
-/**
  * input_buff - buffers chained commands
  * @info: parameter struct
  * @buf: address of buffer
@@ -144,7 +111,7 @@ ssize_t read_buff(info_t *info, char *buf, size_t *i)
  *
  * Return: o
  */
-int _get_line(info_t *info, char **ptr, size_t *length)
+int _getline(info_t *info, char **ptr, size_t *length)
 {
 	static char buf[READ_BUF_SIZE];
 	static size_t i, len;
@@ -162,7 +129,7 @@ int _get_line(info_t *info, char **ptr, size_t *length)
 		return (-1);
 	c = strchr(buf + i, '\n');
 	b = c ? 1 + (unsigned int)(c - buf) : len;
-	new_p = _real_loc(m, o, o ? o + b : b + 1);
+
 	if (!new_p)
 		return (m ? free(m), -1 : -1);
 
@@ -185,7 +152,7 @@ int _get_line(info_t *info, char **ptr, size_t *length)
  *
  * Return: void
  */
-void sigint_Handler(__attribute__((unused))int sig_num)
+void sigintHandler(__attribute__((unused))int sig_num)
 {
 	puts("\n");
 	puts("$ ");
