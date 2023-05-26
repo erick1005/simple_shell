@@ -48,7 +48,7 @@ int write_hist(info_t *info)
 		_edputsfd(node->str, fd);
 		put_fd('\n', fd);
 	}
-	_putfd(BUF_FLUSH, fd);
+	put_fd(BUF_FLUSH, fd);
 	close(fd);
 	return (1);
 }
