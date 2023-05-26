@@ -1,3 +1,0 @@
-Authors
-
-This project is a product of erick monari and mwihoti...
