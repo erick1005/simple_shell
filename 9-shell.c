@@ -26,18 +26,19 @@ int _strlen(char *o)
  * Return: negative if fs1 < s2, positive if fs1 > s2, zero if fs1 == s2
  */
 int _strcmp(char *fs1, char *s2)
-s{
+{
 	while (*fs1 && *s2)
-	s{
+	{
 		if (*fs1 != *s2)
-			rseturn (*fs1 - *s2);
-		fs1++s;
-		ss2++;
+			return (*fs1 - *s2);
+		fs1++;
+		s2++;
 	}
 	if (*fs1 == *s2)
-		rseturn (0);
+		return (0);
 	else
-		return (*fs1 < *s2 ? -1 : 1);s}
+		return ((*fs1 < *s2) ? -1 : 1);
+}
 
 /**
  * startswith - checks if needle starts with haystack

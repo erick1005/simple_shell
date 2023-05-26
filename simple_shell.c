@@ -40,7 +40,6 @@ int main(int ac, char **av)
 	}
 	populate_envlist(info);
 	read_histf(info);
-	mhsh(info, av);
 	return (EXIT_SUCCESS);
 }
 

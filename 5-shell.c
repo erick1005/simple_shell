@@ -37,13 +37,13 @@ int  err_atoi(char *o)
  */
 void printerror(info_t *info, char *estr)
 {
-	_eputs(info->fname);
-	_eputs(": ");
+	_eputsd(info->fname);
+	_eputsd(": ");
 	fprint_d(info->line_count, STDERR_FILENO);
-	_eputs(": ");
-	_eputs(info->argv[0]);
-	_eputs(": ");
-	_eputs(estr);
+	_eputsd(": ");
+	_eputsd(info->argv[0]);
+	_eputsd(": ");
+	_eputsd(estr);
 }
 
 /**
@@ -60,7 +60,7 @@ int fprint_d(int input, int fd)
 	unsigned int _abs_, current;
 
 	if (fd == STDERR_FILENO)
-		__putchar = _eputchar;
+		__putchar = eputchar;
 	if (input < 0)
 	{
 		_abs_ = -input;

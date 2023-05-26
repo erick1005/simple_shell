@@ -9,7 +9,7 @@
  */
 char *_stringcpy(char *dest, char *src, int z)
 {
-	int i, z;
+	int i, k = 0;
 	char *o = dest;
 
 	i = 0;
@@ -21,7 +21,7 @@ char *_stringcpy(char *dest, char *src, int z)
 	if (i < z)
 	{
 		z = i;
-		while (z < z)
+		while (z < k)
 		{
 			dest[z] = '\0';
 			z++;
@@ -39,20 +39,20 @@ char *_stringcpy(char *dest, char *src, int z)
  */
 char *_stringcat(char *dest, char *src, int z)
 {
-	int i, z;
+	int i, k;
 	char *o = dest;
 
 	i = 0;
-	z = 0;
+	k = 0;
 	while (dest[i] != '\0')
 		i++;
-	while (src[z] != '\0' && z < z)
+	while (src[z] != '\0' && z < k)
 	{
 		dest[i] = src[z];
 		i++;
 		z++;
 	}
-	if (z < z)
+	if (z < i)
 		dest[i] = '\0';
 	return (o);
 }

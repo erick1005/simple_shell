@@ -8,7 +8,7 @@ int myexit(info_t *info)
 {
 	int exitcheck;
 
-	if (info->argv[1]) /* If there is an exit arguement */
+	if (info->argv[1])
 	{
 		exitcheck = erra_toi(info->argv[1]);
 		if (exitcheck == -1)
@@ -19,7 +19,7 @@ int myexit(info_t *info)
 			eputchar('\n');
 			return (1);
 		}
-		info->err_num = _erratoi(info->argv[1]);
+		info->err_num = erra_toi(info->argv[1]);
 		return (-2);
 	}
 	info->err_num = -1;
@@ -41,36 +41,36 @@ int mycd(info_t *info)
 		_eputsd("TODO: >>getcwd failure emsg here<<\n");
 	if (!info->argv[1])
 	{
-		dir = getenv(info, "HOME=");
+		dir = getenva(info, "HOME=");
 		if (!dir)
 			chdir_ret = /* TODO: what should this be? */
-				chdir((dir = getenv(info, "PWD=")) ? dir : "/");
+				chdir((dir = getenva(info, "PWD=")) ? dir : "/");
 		else
 			chdir_ret = chdir(dir);
 	}
 	else if (strcmp(info->argv[1], "-") == 0)
 	{
-		if (!getenv(info, "OLDPWD="))
+		if (!getenva(info, "OLDPWD="))
 		{
 			_eputsd(o);
 			eputchar('\n');
 			return (1);
 		}
-		_eputsd(getenv(info, "OLDPWD=")), eputchar('\n');
+		_eputsd(getenva(info, "OLDPWD=")), eputchar('\n');
 		chdir_ret = /* TODO: what should this be? */
-			chdir((dir = getenv(info, "OLDPWD=")) ? dir : "/");
+			chdir((dir = getenva(info, "OLDPWD=")) ? dir : "/");
 	}
 	else
 		chdir_ret = chdir(info->argv[1]);
 	if (chdir_ret == -1)
 	{
 		printerror(info, "can't cd to ");
-		_eputs(info->argv[1]), eputchar('\n');
+		_eputsd(info->argv[1]), eputchar('\n');
 	}
 	else
 	{
-		setenv(info, "OLDPWD", getenv(info, "PWD="));
-		setenv(info, "PWD", getcwd(buffer, 1024));
+		_setenvmd(info, "OLDPWD", getenva(info, "PWD="));
+		_setenvmd(info, "PWD", getcwd(buffer, 1024));
 	}
 	return (0);
 }
@@ -85,8 +85,8 @@ int _mychelp(info_t *info)
 	char **arg_array;
 
 	arg_array = info->argv;
-	_eputs("help call works. Function not yet implemented \n");
+	_eputsd("help call works. Function not yet implemented \n");
 	if (0)
-		_eputs(*arg_array); /* temp att_unused workaround */
+		_eputsd(*arg_array);
 	return (0);
 }

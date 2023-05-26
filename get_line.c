@@ -1,6 +1,39 @@
 #include "shell.h"
 
 /**
+ * _realloc - reallocate memory
+ * @ptr: pointer
+ * @old_size: byte size
+ * @new_size: byte size of new block
+ *
+ * Return: pointer to da ol'block nameen.
+ */
+
+void *_real_loc(void *ptr, unsigned int old_size, unsigned int new_size);
+
+void *_real_loc(void *ptr, unsigned int old_size, unsigned int new_size)
+{
+	char *p;
+
+	if (!ptr)
+		return (malloc(new_size));
+	if (!new_size)
+		return (free(ptr), NULL);
+	if (new_size == old_size)
+		return (ptr);
+
+	p = malloc(new_size);
+	if (!p)
+		return (NULL);
+
+	old_size = old_size < new_size ? old_size : new_size;
+	while (old_size--)
+		p[old_size] = ((char *)ptr)[old_size];
+	free(ptr);
+	return (p);
+}
+
+/**
  * input_buff - buffers chained commands
  * @info: parameter struct
  * @buf: address of buffer
@@ -13,16 +46,15 @@ ssize_t input_buff(info_t *info, char **buf, size_t *len)
 	ssize_t r = 0;
 	size_t len_p = 0;
 
-	if (!*len) /* if nothing left in the buffer, fill it */
+	if (!*len)
 	{
-		/*bfree((void **)info->cmd_buf);*/
 		free(*buf);
 		*buf = NULL;
-		signal(SIGINT, sigint_Handler);
+		signal(SIGINT, sigintHandler);
 #if USE_GETLINE
-		r = getline(buf, &len_p, stdin);
+		r = _getline(buf, &len_p, stdin);
 #else
-		r = _get_line(info, buf, &len_p);
+		r = _getline(info, buf, &len_p);
 #endif
 		if (r > 0)
 		{
@@ -32,9 +64,9 @@ ssize_t input_buff(info_t *info, char **buf, size_t *len)
 				r--;
 			}
 			info->linecount_flag = 1;
-			remove_comments(*buf);
-			build_history_list(info, *buf, info->histcount++);
-			/* if (_strchr(*buf, ';')) is this a command chain? */
+			remove_com(*buf);
+			build_histlist(info, *buf, info->histcount++);
+
 			{
 				*len = r;
 				info->cmd_buf = buf;
@@ -43,7 +75,6 @@ ssize_t input_buff(info_t *info, char **buf, size_t *len)
 	}
 	return (r);
 }
-
 /**
  * gett_input - gets a line minus the newline
  * @info: parameter struct
@@ -52,41 +83,37 @@ ssize_t input_buff(info_t *info, char **buf, size_t *len)
  */
 ssize_t gett_input(info_t *info)
 {
-	static char *buf; /* the ';' command chain buffer */
+	static char *buf;
 	static size_t i, n, len;
 	ssize_t r = 0;
 	char **buf_p = &(info->arg), *m;
 
-	_putchar(BUF_FLUSH);
+	eputchar(BUF_FLUSH);
 	r = input_buff(info, &buf, &len);
-	if (r == -1) /* EOF */
+	if (r == -1)
 		return (-1);
-	if (len) /* we have commands left in the chain buffer */
+	if (len)
 	{
-		n = i; /* init new iterator to current buf position */
-		m = buf + i; /* get pointer for return */
-
-		check_chain(info, buf, &n, i, len);
+		n = i;
+		m = buf + i;
+		checks_chain(info, buf, &n, i, len);
 		while (n < len) /* iterate to semicolon or end */
 		{
 			if (is_chain(info, buf, &n))
 				break;
 			n++;
 		}
-
-		i = n + 1; /* increment past nulled ';'' */
-		if (i >= len) /* reached end of buffer? */
+		i = n + 1;
+		if (i >= len)
 		{
-			i = len = 0; /* reset position and length */
+			i = len = 0;
 			info->cmd_buf_type = CMD_NORM;
 		}
-
-		*buf_p = m; /* pass back pointer to current command position */
-		return (_strlen(m)); /* return length of current command */
+		*buf_p = m;
+		return (_strlen(m));
 	}
-
-	*buf_p = buf; /* else not a chain, pass back buffer from _get_line() */
-	return (r); /* return length of buffer from _get_line() */
+	*buf_p = buf;
+	return (r);
 }
 
 /**
@@ -130,26 +157,22 @@ int _get_line(info_t *info, char **ptr, size_t *length)
 		o = *length;
 	if (i == len)
 		i = len = 0;
-
 	r = read_buff(info, buf, &len);
 	if (r == -1 || (r == 0 && len == 0))
 		return (-1);
-
-	c = _strchr(buf + i, '\n');
+	c = strchr(buf + i, '\n');
 	b = c ? 1 + (unsigned int)(c - buf) : len;
-	new_p = _realloc(m, o, o ? o + b : b + 1);
-	if (!new_p) /* MALLOC FAILURE! */
+	new_p = _real_loc(m, o, o ? o + b : b + 1);
+	if (!new_p)
 		return (m ? free(m), -1 : -1);
 
 	if (o)
-		_strncat(new_p, buf + i, b - i);
+		strncat(new_p, buf + i, b - i);
 	else
-		_strncpy(new_p, buf + i, b - i + 1);
-
+		strncpy(new_p, buf + i, b - i + 1);
 	o += b - i;
 	i = b;
 	m = new_p;
-
 	if (length)
 		*length = o;
 	*ptr = m;
@@ -164,7 +187,7 @@ int _get_line(info_t *info, char **ptr, size_t *length)
  */
 void sigint_Handler(__attribute__((unused))int sig_num)
 {
-	_puts("\n");
-	_puts("$ ");
-	_putchar(BUF_FLUSH);
+	puts("\n");
+	puts("$ ");
+	eputchar(BUF_FLUSH);
 }

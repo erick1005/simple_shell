@@ -67,11 +67,11 @@ size_t print_list(const list_t *h)
 
 	while (h)
 	{
-		_eputs(convert_number(h->num, 10, 0));
-		_eputchar(':');
-		_eputchar(' ');
-		_eputs(h->str ? h->str : "(nil)");
-		_eputs("\n");
+		_eputsd(convert_numb(h->num, 10, 0));
+		eputchar(':');
+		eputchar(' ');
+		_eputsd(h->str ? h->str : "(nil)");
+		_eputsd("\n");
 		h = h->next;
 		i++;
 	}
